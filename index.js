@@ -1,6 +1,9 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+
+//BD
 const conn = require('./db/conn');
+const User = require('./models/User');
 
 const app = express();
 
@@ -18,8 +21,9 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-
-
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
-});
+conn.sync().then(() => {
+    app.listen(3000)
+}).catch((err) => {
+    console.log(err)
+}
+);
