@@ -11,6 +11,8 @@ app.set('views','./views')
 app.use( express.urlencoded({ extended: true}),)
 app.use(express.json());
 app.use(express.static('public'))
+
+
 app.get('/users/create', (req,res)=>{
     res.render('adduser')
 })
@@ -25,8 +27,10 @@ app.post('/users/create', async (req,res)=>{
     await  User.create({name, occupation, newsletter})
     res.redirect('/')
 })
-app.get('/', (req, res) => {
-    res.render('home');
+app.get('/', async (req, res) => {
+    const users = await User.findAll({raw: true})
+    console.log(users)
+    res.render('home', {users:users});
 });
 
 conn.sync().then(() => {
